@@ -8,3 +8,5 @@ frontend/.git_backup_frontend/
 *.log
 .env
 .DS_Store
+*.iml
+node_modules/
