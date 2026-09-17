@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title + ' | HR Management System'}">HR Management System</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<aside class="sidebar" th:fragment="sidebar(active)">
+    <div class="brand">
+        <span>HR</span>
+        <div>
+            <strong th:text="${settings.companyName}">PeopleCore</strong>
+            <small>Management Suite</small>
+        </div>
+    </div>
+    <nav>
+        <a th:classappend="${active == 'dashboard'} ? 'active' : ''" th:href="@{/}">Dashboard</a>
+        <a th:classappend="${active == 'employees'} ? 'active' : ''" th:href="@{/employees}">Employees</a>
+        <a th:classappend="${active == 'attendance'} ? 'active' : ''" th:href="@{/attendance}">Attendance</a>
+        <a th:classappend="${active == 'payroll'} ? 'active' : ''" th:href="@{/payroll}">Payroll</a>
+        <a th:classappend="${active == 'leave'} ? 'active' : ''" th:href="@{/leave}">Leave</a>
+        <a th:classappend="${active == 'jobs'} ? 'active' : ''" th:href="@{/jobs}">Hiring</a>
+        <a th:classappend="${active == 'reports'} ? 'active' : ''" th:href="@{/reports}">Reports</a>
+        <a th:classappend="${active == 'settings'} ? 'active' : ''" th:href="@{/settings}">Settings</a>
+    </nav>
+</aside>
+<section class="topbar" th:fragment="topbar(title)">
+    <div>
+        <p class="eyebrow">Company HRMS</p>
+        <h1 th:text="${title}">Dashboard</h1>
+    </div>
+    <form class="global-search" th:action="@{/employees}" method="get">
+        <input type="search" name="search" placeholder="Search employees, teams, roles">
+        <button type="submit">Search</button>
+    </form>
+    <div class="profile-pill">
+        <span>HM</span>
+        <div>
+            <strong th:text="${settings.hrManager}">HR Manager</strong>
+            <small>Admin</small>
+        </div>
+        <form th:action="@{/logout}" method="post">
+            <button class="logout-button" type="submit">Logout</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

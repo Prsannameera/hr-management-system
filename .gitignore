@@ -1,0 +1,10 @@
+.idea/
+target/
+
+frontend/node_modules/
+frontend/dist/
+frontend/.git_backup_frontend/
+
+*.log
+.env
+.DS_Store

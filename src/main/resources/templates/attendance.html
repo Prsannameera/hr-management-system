@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Attendance')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/layout :: sidebar('attendance')}"></aside>
+    <main class="main">
+        <section th:replace="~{fragments/layout :: topbar('Attendance')}"></section>
+
+        <p class="flash" th:if="${message}" th:text="${message}"></p>
+
+        <section class="metric-grid compact-metrics">
+            <article class="metric-card">
+                <span>Present Today</span>
+                <strong th:text="${presentToday}">0</strong>
+            </article>
+            <article class="metric-card">
+                <span>Absent Today</span>
+                <strong th:text="${absentToday}">0</strong>
+            </article>
+            <article class="metric-card">
+                <span>Total Employees</span>
+                <strong th:text="${employees.size()}">0</strong>
+            </article>
+        </section>
+
+        <section class="panel narrow-panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Mark Attendance</h2>
+                    <p>Record presence for a selected employee and date.</p>
+                </div>
+            </div>
+            <form class="form-grid" th:action="@{/attendance}" method="post">
+                <label>Employee
+                    <select name="employeeId" required>
+                        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.name + ' - ' + employee.department}"></option>
+                    </select>
+                </label>
+                <label>Date<input type="date" name="date" th:value="${today}" required></label>
+                <label>Status
+                    <select name="present">
+                        <option value="true">Present</option>
+                        <option value="false">Absent</option>
+                    </select>
+                </label>
+                <button class="primary-action full" type="submit">Save Attendance</button>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

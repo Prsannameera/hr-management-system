@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | HR Management System</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="auth-body">
+<main class="auth-shell">
+    <section class="auth-visual">
+        <div class="auth-brand">
+            <span>HR</span>
+            <strong>Infotroz</strong>
+        </div>
+        <h1>Manage people, attendance, leave, hiring, and payroll from one secure HRMS.</h1>
+        <div class="auth-preview-grid">
+            <article><span>Total Employees</span><strong>248</strong></article>
+            <article><span>Present Today</span><strong>226</strong></article>
+            <article><span>Open Roles</span><strong>14</strong></article>
+        </div>
+    </section>
+
+    <section class="auth-card">
+        <p class="eyebrow">Secure Access</p>
+        <h2>Sign in</h2>
+        <p class="auth-copy">Use your HR account to access the dashboard.</p>
+
+        <p class="flash" th:if="${message}" th:text="${message}"></p>
+        <p class="flash error" th:if="${param.error}">Invalid email or password.</p>
+        <p class="flash" th:if="${param.logout}">You have been signed out.</p>
+
+        <form class="form-grid" th:action="@{/login}" method="post">
+            <label>Email<input type="email" name="email" placeholder="admin@hrms.com" required></label>
+            <label>Password<input type="password" name="password" placeholder="admin123" required></label>
+            <button class="primary-action full" type="submit">Sign In</button>
+        </form>
+
+        <p class="auth-switch">New HR user? <a th:href="@{/signup}">Create an account</a></p>
+    </section>
+</main>
+</body>
+</html>

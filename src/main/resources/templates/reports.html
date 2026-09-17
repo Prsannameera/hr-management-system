@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reports')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/layout :: sidebar('reports')}"></aside>
+    <main class="main">
+        <section th:replace="~{fragments/layout :: topbar('Reports')}"></section>
+
+        <section class="metric-grid">
+            <article class="metric-card">
+                <span>Employees</span>
+                <strong th:text="${employeeCount}">0</strong>
+            </article>
+            <article class="metric-card">
+                <span>Active</span>
+                <strong th:text="${activeEmployees}">0</strong>
+            </article>
+            <article class="metric-card">
+                <span>On Leave</span>
+                <strong th:text="${onLeaveEmployees}">0</strong>
+            </article>
+            <article class="metric-card">
+                <span>Open Positions</span>
+                <strong th:text="${openPositions}">0</strong>
+            </article>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Workforce Report</h2>
+                    <p>Department-wise employee and salary view.</p>
+                </div>
+                <button type="button" onclick="window.print()">Print Report</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Salary</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="employee : ${employees}">
+                        <td th:text="${employee.name}">Name</td>
+                        <td th:text="${employee.department}">Department</td>
+                        <td th:text="${employee.role}">Role</td>
+                        <td th:text="${employee.status}">Active</td>
+                        <td th:text="${#numbers.formatDecimal(employee.monthlySalary, 1, 2)}">0.00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

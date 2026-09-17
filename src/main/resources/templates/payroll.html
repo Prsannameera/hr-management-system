@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Payroll')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/layout :: sidebar('payroll')}"></aside>
+    <main class="main">
+        <section th:replace="~{fragments/layout :: topbar('Payroll')}"></section>
+
+        <section class="split-layout">
+            <article class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Generate Payroll</h2>
+                        <p>Select an employee and payroll month.</p>
+                    </div>
+                </div>
+                <form class="form-grid" th:action="@{/payroll}" method="get">
+                    <label>Employee
+                        <select name="employeeId" required>
+                            <option value="">Choose employee</option>
+                            <option th:each="employee : ${employees}"
+                                    th:value="${employee.id}"
+                                    th:selected="${employee.id == selectedEmployeeId}"
+                                    th:text="${employee.name + ' - ' + employee.role}"></option>
+                        </select>
+                    </label>
+                    <label>Month<input type="month" name="month" th:value="${selectedMonth}" required></label>
+                    <button class="primary-action full" type="submit">Generate</button>
+                </form>
+            </article>
+
+            <article class="panel payroll-card" th:if="${summary}">
+                <div class="panel-header">
+                    <div>
+                        <h2 th:text="${summary.employee.name}">Employee</h2>
+                        <p th:text="${summary.month}">2026-07</p>
+                    </div>
+                </div>
+                <dl class="payroll-grid">
+                    <div><dt>Working Days</dt><dd th:text="${summary.workingDays}">0</dd></div>
+                    <div><dt>Present Days</dt><dd th:text="${summary.presentDays}">0</dd></div>
+                    <div><dt>Gross Salary</dt><dd th:text="${#numbers.formatDecimal(summary.grossSalary, 1, 2)}">0.00</dd></div>
+                    <div><dt>Deductions</dt><dd th:text="${#numbers.formatDecimal(summary.deductions, 1, 2)}">0.00</dd></div>
+                    <div class="net"><dt>Net Salary</dt><dd th:text="${#numbers.formatDecimal(summary.netSalary, 1, 2)}">0.00</dd></div>
+                </dl>
+            </article>
+        </section>
+    </main>
+</div>
+</body>
+</html>

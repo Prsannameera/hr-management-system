@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Employees')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/layout :: sidebar('employees')}"></aside>
+    <main class="main">
+        <section th:replace="~{fragments/layout :: topbar('Employees')}"></section>
+
+        <p class="flash" th:if="${message}" th:text="${message}"></p>
+
+        <section class="split-layout">
+            <article class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Add Employee</h2>
+                        <p>Create a new employee profile.</p>
+                    </div>
+                </div>
+                <form class="form-grid" th:action="@{/employees}" method="post">
+                    <label>Name<input name="name" required></label>
+                    <label>Email<input type="email" name="email" required></label>
+                    <label>Department<input name="department" required></label>
+                    <label>Role<input name="role" required></label>
+                    <label>Monthly Salary<input type="number" name="monthlySalary" min="0" step="0.01" required></label>
+                    <label>Joining Date<input type="date" name="joiningDate" required></label>
+                    <label>Birth Date<input type="date" name="birthDate" required></label>
+                    <button class="primary-action full" type="submit">Add Employee</button>
+                </form>
+            </article>
+
+            <article class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Team List</h2>
+                        <p>Update roles, departments, and salaries.</p>
+                    </div>
+                </div>
+                <div class="employee-list">
+                    <div class="employee-row" th:each="employee : ${employees}">
+                        <div class="employee-summary">
+                            <strong th:text="${employee.name}">Employee</strong>
+                            <span th:text="${employee.email}">email@example.com</span>
+                        </div>
+                        <form class="inline-edit" th:action="@{/employees/{id}/update(id=${employee.id})}" method="post">
+                            <input name="department" th:value="${employee.department}" aria-label="Department">
+                            <input name="role" th:value="${employee.role}" aria-label="Role">
+                            <input type="number" name="monthlySalary" min="0" step="0.01" th:value="${employee.monthlySalary}" aria-label="Salary">
+                            <select name="status" aria-label="Status">
+                                <option value="Active" th:selected="${employee.status == 'Active'}">Active</option>
+                                <option value="On Leave" th:selected="${employee.status == 'On Leave'}">On Leave</option>
+                                <option value="Inactive" th:selected="${employee.status == 'Inactive'}">Inactive</option>
+                            </select>
+                            <button type="submit">Save</button>
+                        </form>
+                        <form th:action="@{/employees/{id}/delete(id=${employee.id})}" method="post">
+                            <button class="danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+</body>
+</html>

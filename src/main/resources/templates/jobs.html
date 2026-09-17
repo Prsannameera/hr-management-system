@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Hiring')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/layout :: sidebar('jobs')}"></aside>
+    <main class="main">
+        <section th:replace="~{fragments/layout :: topbar('Hiring Pipeline')}"></section>
+
+        <p class="flash" th:if="${message}" th:text="${message}"></p>
+
+        <section class="split-layout">
+            <article class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Create Opening</h2>
+                        <p>Add a new position to the hiring plan.</p>
+                    </div>
+                </div>
+                <form class="form-grid" th:action="@{/jobs}" method="post">
+                    <label>Job Title<input name="title" required></label>
+                    <label>Department<input name="department" required></label>
+                    <label>Location<input name="location" required></label>
+                    <label>Openings<input type="number" name="openings" min="1" required></label>
+                    <button class="primary-action full" type="submit">Create Opening</button>
+                </form>
+            </article>
+
+            <article class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Open Positions</h2>
+                        <p>Track current recruitment demand.</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Location</th>
+                            <th>Openings</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="job : ${jobOpenings}">
+                            <td th:text="${job.title}">Developer</td>
+                            <td th:text="${job.department}">Engineering</td>
+                            <td th:text="${job.location}">Bengaluru</td>
+                            <td th:text="${job.openings}">1</td>
+                            <td><span class="status" th:classappend="${job.status == 'Open'} ? ' good' : ' bad'" th:text="${job.status}">Open</span></td>
+                            <td>
+                                <form th:if="${job.status == 'Open'}" th:action="@{/jobs/{id}/close(id=${job.id})}" method="post">
+                                    <button class="secondary-button" type="submit">Close</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+</body>
+</html>

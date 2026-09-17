@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Settings')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/layout :: sidebar('settings')}"></aside>
+    <main class="main">
+        <section th:replace="~{fragments/layout :: topbar('Settings')}"></section>
+
+        <p class="flash" th:if="${message}" th:text="${message}"></p>
+
+        <section class="panel narrow-panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Company Settings</h2>
+                    <p>These values update dynamically while the app is running.</p>
+                </div>
+            </div>
+            <form class="form-grid" th:action="@{/settings}" method="post">
+                <label>Company Name<input name="companyName" th:value="${settings.companyName}" required></label>
+                <label>HR Manager<input name="hrManager" th:value="${settings.hrManager}" required></label>
+                <label>Office Location<input name="officeLocation" th:value="${settings.officeLocation}" required></label>
+                <label>Annual Leave Days<input type="number" name="annualLeaveDays" min="0" th:value="${settings.annualLeaveDays}" required></label>
+                <button class="primary-action full" type="submit">Save Settings</button>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

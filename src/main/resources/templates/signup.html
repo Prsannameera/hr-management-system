@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup | HR Management System</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="auth-body">
+<main class="auth-shell">
+    <section class="auth-visual">
+        <div class="auth-brand">
+            <span>HR</span>
+            <strong>PeopleCore</strong>
+        </div>
+        <h1>Create an HR account and start managing company operations with a real MySQL-backed system.</h1>
+        <div class="auth-preview-grid">
+            <article><span>Database</span><strong>MySQL</strong></article>
+            <article><span>Security</span><strong>Login</strong></article>
+            <article><span>Modules</span><strong>8</strong></article>
+        </div>
+    </section>
+
+    <section class="auth-card">
+        <p class="eyebrow">Account Setup</p>
+        <h2>Create account</h2>
+        <p class="auth-copy">This account can sign in and manage HRMS records.</p>
+
+        <p class="flash error" th:if="${error}" th:text="${error}"></p>
+
+        <form class="form-grid" th:action="@{/signup}" method="post">
+            <label>Full Name<input name="fullName" required></label>
+            <label>Email<input type="email" name="email" required></label>
+            <label>Password<input type="password" name="password" minlength="6" required></label>
+            <button class="primary-action full" type="submit">Create Account</button>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a th:href="@{/login}">Sign in</a></p>
+    </section>
+</main>
+</body>
+</html>

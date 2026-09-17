@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+<div class="app-shell">
+    <aside th:replace="~{fragments/layout :: sidebar('dashboard')}"></aside>
+    <main class="main">
+        <section th:replace="~{fragments/layout :: topbar('HR Dashboard')}"></section>
+        <p class="flash" th:if="${message}" th:text="${message}"></p>
+
+        <section class="metric-grid">
+            <a class="metric-card" th:href="@{/employees}">
+                <span>Total Employees</span>
+                <strong th:text="${employeeCount}">0</strong>
+            </a>
+            <a class="metric-card" th:href="@{/attendance}">
+                <span>Present Today</span>
+                <strong th:text="${presentToday}">0</strong>
+            </a>
+            <a class="metric-card" th:href="@{/jobs}">
+                <span>Open Positions</span>
+                <strong th:text="${openPositions}">0</strong>
+            </a>
+            <a class="metric-card" th:href="@{/leave}">
+                <span>Leave Requests</span>
+                <strong th:text="${pendingLeaves}">0</strong>
+            </a>
+            <a class="metric-card" th:href="@{/payroll}">
+                <span>Monthly Payroll</span>
+                <strong th:text="${#numbers.formatDecimal(totalPayroll, 1, 2)}">0.00</strong>
+            </a>
+        </section>
+
+        <section class="dashboard-grid">
+            <article class="panel dashboard-main">
+                <div class="panel-header">
+                    <div>
+                        <h2>Employee Directory</h2>
+                        <p>Live workforce list with role, department, status, and salary.</p>
+                    </div>
+                    <a class="secondary-action" th:href="@{/employees}">Open Directory</a>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Department</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Salary</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="employee : ${employees}">
+                            <td>
+                                <strong th:text="${employee.name}">Employee</strong>
+                                <span th:text="${employee.email}">email@example.com</span>
+                            </td>
+                            <td th:text="${employee.department}">HR</td>
+                            <td th:text="${employee.role}">Executive</td>
+                            <td><span class="status" th:classappend="${employee.status == 'Active'} ? ' good' : ' warn'" th:text="${employee.status}">Active</span></td>
+                            <td th:text="${#numbers.formatDecimal(employee.monthlySalary, 1, 2)}">0.00</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <aside class="side-stack">
+                <article class="panel">
+                    <div class="panel-header compact">
+                        <div>
+                            <h2>Attendance Summary</h2>
+                            <p th:text="${presentToday + ' present, ' + absentToday + ' absent today'}">0 present</p>
+                        </div>
+                    </div>
+                    <div class="attendance-bars">
+                        <div>
+                            <span>Present</span>
+                            <strong th:text="${presentToday}">0</strong>
+                        </div>
+                        <div>
+                            <span>Absent</span>
+                            <strong th:text="${absentToday}">0</strong>
+                        </div>
+                        <div>
+                            <span>Pending Leave</span>
+                            <strong th:text="${pendingLeaves}">0</strong>
+                        </div>
+                    </div>
+                    <a class="secondary-action full" th:href="@{/attendance}">Mark Attendance</a>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-header compact">
+                        <div>
+                            <h2>Leave Requests</h2>
+                            <p th:text="${pendingLeaves + ' pending approval'}">0 pending approval</p>
+                        </div>
+                    </div>
+                    <div class="mini-list action-list" th:if="${!leaveRequests.isEmpty()}">
+                        <div th:each="request : ${leaveRequests}">
+                            <section>
+                                <strong th:text="${request.employeeName}">Employee</strong>
+                                <span th:text="${request.leaveType + ' | ' + request.startDate + ' to ' + request.endDate}">Leave dates</span>
+                            </section>
+                            <form th:action="@{/dashboard/leave/{id}/approve(id=${request.id})}" method="post">
+                                <button type="submit">Approve</button>
+                            </form>
+                            <form th:action="@{/dashboard/leave/{id}/reject(id=${request.id})}" method="post">
+                                <button class="danger" type="submit">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                    <p class="empty-state" th:if="${leaveRequests.isEmpty()}">No pending leave requests.</p>
+                    <a class="secondary-action full" th:href="@{/leave}">Open Leave</a>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-header compact">
+                        <div>
+                            <h2>Upcoming Birthdays</h2>
+                            <p>Employee celebrations.</p>
+                        </div>
+                    </div>
+                    <div class="mini-list">
+                        <div th:each="employee : ${birthdays}">
+                            <strong th:text="${employee.name}">Name</strong>
+                            <span th:text="${#temporals.format(employee.birthDate, 'dd MMM')}">22 Jul</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-header compact">
+                        <div>
+                            <h2>Open Hiring</h2>
+                            <p th:text="${openPositions + ' positions open'}">0 positions open</p>
+                        </div>
+                    </div>
+                    <div class="mini-list">
+                        <div th:each="job : ${jobOpenings}" th:if="${job.status == 'Open'}">
+                            <strong th:text="${job.title}">Role</strong>
+                            <span th:text="${job.department + ' - ' + job.openings + ' openings'}">Department</span>
+                        </div>
+                    </div>
+                    <a class="secondary-action full" th:href="@{/jobs}">Manage Hiring</a>
+                </article>
+            </aside>
+        </section>
+    </main>
+</div>
+</body>
+</html>
